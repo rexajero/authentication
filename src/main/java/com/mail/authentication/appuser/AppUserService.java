@@ -32,29 +32,53 @@ public class AppUserService implements UserDetailsService{
 
     public String signUpUser(AppUser appUser) {
         boolean userExist = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
-        if(userExist) {
-            throw new IllegalStateException("Email is already taken.");
-        }
-
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
-        appUser.setPassword(encodedPassword);
-
-        appUserRepository.save(appUser);
-
         String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-            token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser
-        );
 
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        if(userExist) {
+            AppUser au = appUserRepository.findByEmail(appUser.getEmail())
+                            .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, appUser.getEmail())));
+            if(au.isEnabled()) {
+                throw new IllegalStateException("Email is already taken.");
+            }
 
-        //TO DO: Send email
+            //Update Token details here
+            ConfirmationToken ct = new ConfirmationToken(
+                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), au
+            );
+            confirmationTokenService.saveConfirmationToken(ct);
+            
+        } else {
+            String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+            appUser.setPassword(encodedPassword);
 
+            appUserRepository.save(appUser);
+
+            ConfirmationToken confirmationToken = new ConfirmationToken(
+                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser
+            );
+
+            confirmationTokenService.saveConfirmationToken(confirmationToken);
+        }
         return token;
     }
 
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
+    }
+
+    public Long findByEmail(String email) {
+        AppUser au = appUserRepository.findByEmail(email)
+                            .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+        Long id = au.getId();
+        return id;
+    }
+
+    public void resetPassword(Long id, String password) {
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, id)));
+        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+        appUser.setPassword(encodedPassword);
+        appUserRepository.save(appUser);
+        return;
     }
     
 }

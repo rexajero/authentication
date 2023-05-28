@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.mail.authentication.appuser.AppUser;
+import com.mail.authentication.appuser.AppUserRepository;
 import com.mail.authentication.appuser.AppUserRole;
 import com.mail.authentication.appuser.AppUserService;
 import com.mail.authentication.email.EmailSender;
@@ -62,7 +63,26 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
 
-        return "confirmed";
+        return "Your account is confirmed.";
+    }
+
+    public Long confirmEmail(String email) {
+        boolean isValidEmail = emailValidator.test(email);
+        Long id;
+
+        if(!isValidEmail) {
+            throw new IllegalStateException("Email is not valid.");
+        } else {
+            id  = appUserService.findByEmail(email);
+            //Send email reset here with id
+        }
+        
+        return id;
+    }
+
+    public String resetPassword(Long id, String password) {
+        appUserService.resetPassword(id, password);
+        return "Password rest successful.";
     }
 
     private String buildEmail(String name, String link) {
@@ -133,5 +153,7 @@ public class RegistrationService {
                 "\n" +
                 "</div></div>";
     }
+
+    
     
 }
