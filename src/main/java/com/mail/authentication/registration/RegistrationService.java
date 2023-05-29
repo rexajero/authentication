@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.mail.authentication.appuser.AppUser;
-import com.mail.authentication.appuser.AppUserRepository;
 import com.mail.authentication.appuser.AppUserRole;
 import com.mail.authentication.appuser.AppUserService;
 import com.mail.authentication.email.EmailSender;

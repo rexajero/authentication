@@ -1,6 +1,7 @@
 package com.mail.authentication.appuser;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,6 +80,10 @@ public class AppUserService implements UserDetailsService{
         appUser.setPassword(encodedPassword);
         appUserRepository.save(appUser);
         return;
+    }
+
+    public List<AppUser> findAllUsers() {
+        return appUserRepository.findAll();
     }
     
 }
