@@ -2,7 +2,7 @@ spring:
   datasource:
     username: postgres
     password: root12345
-    url: jdbc:postgresql://127.0.0.1:5432/registration
+    url: jdbc:postgresql://127.0.0.1:5432/mytownhouse
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -10,6 +10,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
   mail:
     host: localhost
