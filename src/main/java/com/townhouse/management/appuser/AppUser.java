@@ -42,17 +42,12 @@ public class AppUser implements UserDetails{
         generator = "app_user_sequence"
     )
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String middleName;
-    private Date birthday;
-    private String phoneNumber;
     private String email;
-    private String password; 
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    private String password;
     private Boolean locked = false;
     private Boolean enabled = false;
+    @Enumerated(EnumType.STRING)
+    private AppUserRole appUserRole;
     
     public AppUser(String firstName, 
                     String lastName, 
@@ -61,36 +56,15 @@ public class AppUser implements UserDetails{
                     String phoneNumber,
                     String email, 
                     AppUserRole appUserRole) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = generateInitialPassword(birthday);
         this.appUserRole = appUserRole;
-        // this.locked = locked;
-        // this.enabled = enabled;
     }
 
-    public AppUser(String firstName, 
-                    String lastName, 
-                    String middleName,
-                    Date birthday,
-                    String phoneNumber,
-                    String email, 
-                    String password, 
-                    AppUserRole appUserRole) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.middleName = middleName;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
+    public AppUser(String email, String password, AppUserRole appUserRole) {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
-        // this.locked = locked;
-        // this.enabled = enabled;
     }
 
     @Override
@@ -100,48 +74,40 @@ public class AppUser implements UserDetails{
         return Collections.singletonList(authority);
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     private String generateInitialPassword(Date birthday) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String pass = sdf.format(birthday);
         return pass;
+    }
+
+    @Override
+    public String getUsername() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonExpired'");
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonLocked'");
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isCredentialsNonExpired'");
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
     }
     
 }

@@ -21,8 +21,8 @@ public class OccupantController {
     }
 
     @PostMapping
-    public ResponseEntity<List<OccupantDTO>> addOccupants(@RequestBody List<OccupantRegistrationRequest> request) throws Exception {
-        return new ResponseEntity<List<OccupantDTO>>(occupantService.add(request), HttpStatus.OK);
+    public ResponseEntity<String> addOccupants(@RequestBody List<OccupantRegistrationRequest> request) throws Exception {
+        return new ResponseEntity<String>(occupantService.add(request), HttpStatus.OK);
     }
 
     @GetMapping(path = "all")

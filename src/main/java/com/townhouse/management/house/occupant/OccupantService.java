@@ -55,9 +55,7 @@ public class OccupantService {
                 .orElseThrow(() -> new Exception("Occupant does not exist."));
     }
 
-    public List<OccupantDTO> add(List<OccupantRegistrationRequest> request) {
-        Set<Occupant> occupants = new HashSet<Occupant>();
-
+    public String add(List<OccupantRegistrationRequest> request) {
         for(OccupantRegistrationRequest reg_req : request) {
             House house = houseRepository.getById(reg_req.getHouseId());
 
@@ -70,9 +68,8 @@ public class OccupantService {
                         reg_req.getEmail(), 
                         reg_req.getContactNumber());
             occupant = occupantRepository.save(occupant);
-            occupants.add(occupant);
         }
-
-        return occupants.stream().map(occupantDTOMapper).collect(Collectors.toList());
+        
+        return "Occupants added.";
     }
 }

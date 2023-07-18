@@ -1,6 +1,8 @@
 package com.townhouse.management.appuser;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,9 +36,6 @@ public class AppUserService implements UserDetailsService{
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
-    private final HouseService houseService;
-    private final OwnerService ownerService;
-    private final OccupantService occupantService;
     private final EmailSender emailSender;
 
     @Override
@@ -156,9 +155,20 @@ public class AppUserService implements UserDetailsService{
     public void sendEmail(AppUser appUser, String token) {
         
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), link));
+        // emailSender.send(appUser.getEmail(), buildEmail(appUser.getFirstName(), link));
+        emailSender.send(appUser.getEmail(), buildEmail("appUser.getFirstName()", link));
     }
     
+    public AppUser registeAppUserFromOwner(Owner owner) {
+        return appUserRepository.save(new AppUser(owner.getEmail(), generateInitialPassword(owner.getBirthday()), owner.getAppUserRole()));
+    }
+
+    private String generateInitialPassword(Date birthday) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String pass = sdf.format(birthday);
+        //encode password
+        return pass;
+    }
 
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +

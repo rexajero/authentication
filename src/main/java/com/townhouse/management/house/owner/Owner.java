@@ -71,27 +71,6 @@ public class Owner {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUser;
-    
-    
-    
-    //permanent address
-    //One to many emergency contact
-    //one to many vehicle
-
-    // public Owner(House house, boolean isOccupant, Date birthday, String nationality, String email,
-    //         String zipCode, String country, String province, String city, String addrLineOne, String addLineTwo) {
-    //     this.house = house;
-    //     this.isOccupant = isOccupant;
-    //     this.birthday = birthday;
-    //     this.nationality = nationality;
-    //     this.email = email;
-    //     this.zipCode = zipCode;
-    //     this.country = country;
-    //     this.province = province;
-    //     this.city = city;
-    //     this.addrLineOne = addrLineOne;
-    //     this.addrLineTwo = addLineTwo;
-    // }
 
     public Owner(House house, boolean isOccupant, String firstName, String lastName, String middleName,
             String phoneNumber, Date birthday, String nationality, String email, String zipCode,
@@ -105,6 +84,29 @@ public class Owner {
         this.birthday = birthday;
         this.nationality = nationality;
         this.email = email;
+        this.zipCode = zipCode;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.addrLineOne = addrLineOne;
+        this.addrLineTwo = addrLineTwo;
+        this.appUserRole = AppUserRole.OWNER;
+    }
+
+    //with password
+    public Owner(House house, boolean isOccupant, String firstName, String lastName, String middleName,
+            String phoneNumber, Date birthday, String nationality, String email, String password, String zipCode,
+            String country, String province, String city, String addrLineOne, String addrLineTwo) {
+        this.house = house;
+        this.isOccupant = isOccupant;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.phoneNumber = phoneNumber;
+        this.birthday = birthday;
+        this.nationality = nationality;
+        this.email = email;
+        this.password = password;
         this.zipCode = zipCode;
         this.country = country;
         this.province = province;
