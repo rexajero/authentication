@@ -30,12 +30,5 @@ public class RegistrationController {
     public ResponseEntity<String> confirm(@RequestParam("token") String token) {
         return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.CREATED);
     }
-
-    // @PostMapping(path = "reset")
-    // public ResponseEntity<Long> reset(@RequestParam("email") String email) {
-    //     return new ResponseEntity<Long>(registrationService.confirmEmail(email), HttpStatus.OK);
-    // }
-
-    
     
 }

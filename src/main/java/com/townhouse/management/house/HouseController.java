@@ -26,6 +26,7 @@ public class HouseController {
         return new ResponseEntity<House>(houseService.registerNewHouse(request), HttpStatus.OK);
     }
 
+    //add only the house
     @PostMapping(path = "add")
     public ResponseEntity<House> confirm(@RequestParam("block") int block, @RequestParam("lot") int lot) throws Exception {
         return new ResponseEntity<>(houseService.registerOnlyHouse(block, lot), HttpStatus.CREATED);

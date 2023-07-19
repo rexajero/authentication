@@ -35,7 +35,6 @@ public class AppUserService implements UserDetailsService{
     private final static String USER_NOT_FOUND_MSG = "User with email is not found.";
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
     @Override
@@ -45,90 +44,9 @@ public class AppUserService implements UserDetailsService{
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public String registeAppUser(AppUser appUser) {
-        String token = UUID.randomUUID().toString();
-
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
-        appUser.setPassword(encodedPassword);
-        appUserRepository.save(appUser);
-
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser
-        );
-
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
-        sendEmail(appUser, token);
-        return token;
-    }
-
-    public String signUpUser(AppUser appUser, House house) throws Exception {
-        boolean userExist = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
-        String token = UUID.randomUUID().toString();
-
-        if(userExist) {
-            AppUser au = appUserRepository.findByEmail(appUser.getEmail())
-                            .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, appUser.getEmail())));
-            if(au.isEnabled()) {
-                throw new IllegalStateException("Email is already taken.");
-            }
-
-            //Update Token details here
-            ConfirmationToken ct = new ConfirmationToken(
-                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), au
-            );
-            confirmationTokenService.saveConfirmationToken(ct);
-            
-        } else {
-            String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
-            appUser.setPassword(encodedPassword);
-
-            appUserRepository.save(appUser);
-
-            ConfirmationToken confirmationToken = new ConfirmationToken(
-                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser
-            );
-            confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-            switch(appUser.getAppUserRole()) {
-                case OWNER: 
-                    // ownerService.createNewOwner(appUser, house, false);
-                    // houseService.addHouseOwner(house, owner);
-                    break;
-                case OCCUPANT:
-                    // Occupant occupant = occupantService.createNewOccupant(appUser, house, false);
-                    // houseService.addOccupantToHouse(occupant, house);
-                    break;
-                case ACCOUNTING:
-                    //create owner
-                    break;
-                case ADMIN:
-                    //create owner
-                    break;
-                case MAINTENANCE:
-                    //create owner
-                    break;
-                case SECURITY:
-                    //create owner
-                    break;
-                default:
-                    //create owner
-                    break;
-                
-            }
-        }
-        return token;
-    }
-
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
     }
-
-    // public Long findByEmail(String email) {
-    //     AppUser au = appUserRepository.findByEmail(email)
-    //                         .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
-    //     Long id = au.getId();
-    //     return id;
-    // }
 
     public Boolean findByEmail(String email) {
         return appUserRepository.findByEmail(email).isPresent();

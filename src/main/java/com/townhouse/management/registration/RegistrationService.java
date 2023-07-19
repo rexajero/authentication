@@ -1,12 +1,16 @@
 package com.townhouse.management.registration;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.townhouse.management.appuser.AppUser;
+import com.townhouse.management.appuser.AppUserRepository;
 import com.townhouse.management.appuser.AppUserRole;
 import com.townhouse.management.appuser.AppUserService;
+import com.townhouse.management.email.Email;
 import com.townhouse.management.email.EmailSender;
 import com.townhouse.management.house.House;
 import com.townhouse.management.house.HouseRepository;
@@ -26,6 +30,8 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AppUserRepository appUserRepository;
     private final EmailSender emailSender;
 
     private final HouseRepository houseRepository;
@@ -39,48 +45,35 @@ public class RegistrationService {
             throw new IllegalStateException("Invalid email.");
         }
 
-        AppUser appUser = new AppUser(
-                    request.getFirstName(),
-                    request.getLastName(),
-                    request.getMiddleName(),
-                    request.getBirthday(),
-                    request.getPhoneNumber(),
-                    request.getEmail(),
-                    AppUserRole.valueOf(request.getRole())
-        );
-        
-        String token = null;
+        String token = "null";
 
-        switch (appUser.getAppUserRole()) {
-            case OWNER:
-
-                //Check if house exist
-                // if(houseService.getHouseById(request.getHouseId())) {
-                //     House house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new Exception("House does not exist"));
-                    
-                //     // To implement: Check if House hasNoOwner with exception
-                //     token = appUserService.registeAppUser(appUser);
-                //     // ownerService.createNewOwner(appUser, house, false);
-                // } else {
-                //     System.out.println("House does not exist!");
-                //     // To implement: exception
-                // }
-                break;
-            case ACCOUNTING:
-                break;
+        switch(request.getAppUserRole()){
             case ADMIN:
-                break;
-            case MAINTENANCE:
-                break;
-            case OCCUPANT:
-                // Occupant occupant = occupantService.createNewOccupant(appUser, house, false);
-                // houseService.addOccupantToHouse(occupant, house);
-                break;
-            case SECURITY:
+                token = registerAdmin(request);
                 break;
             default:
                 break;
         }
+        return token;
+    }
+
+    private String registerAdmin(RegistrationRequest request) {
+        String pass = bCryptPasswordEncoder.encode(request.getPassword());
+        AppUser appUser = new AppUser(request.getEmail(), pass, AppUserRole.ADMIN);
+        appUserRepository.save(appUser);
+        return createToken(appUser);
+    }
+
+    private String createToken(AppUser appUser) {
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), appUser
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        Email email = new Email(emailSender);
+        email.sendEmail(appUser, token);
         return token;
     }
 
@@ -103,25 +96,4 @@ public class RegistrationService {
 
         return "Your account is confirmed.";
     }
-
-    // public Long confirmEmail(String email) {
-    //     boolean isValidEmail = emailValidator.test(email);
-    //     Long id;
-
-    //     if(!isValidEmail) {
-    //         throw new IllegalStateException("Email is not valid.");
-    //     } else {
-    //         // id  = appUserService.findByEmail(email);
-    //         //Send email reset here with id
-    //     }
-        
-    //     return id;
-    // }
-
-    
-
-    
-
-    
-    
 }

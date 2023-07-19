@@ -49,17 +49,17 @@ public class AppUser implements UserDetails{
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     
-    public AppUser(String firstName, 
-                    String lastName, 
-                    String middleName,
-                    Date birthday,
-                    String phoneNumber,
-                    String email, 
-                    AppUserRole appUserRole) {
-        this.email = email;
-        this.password = generateInitialPassword(birthday);
-        this.appUserRole = appUserRole;
-    }
+    // public AppUser(String firstName, 
+    //                 String lastName, 
+    //                 String middleName,
+    //                 Date birthday,
+    //                 String phoneNumber,
+    //                 String email, 
+    //                 AppUserRole appUserRole) {
+    //     this.email = email;
+    //     this.password = generateInitialPassword(birthday);
+    //     this.appUserRole = appUserRole;
+    // }
 
     public AppUser(String email, String password, AppUserRole appUserRole) {
         this.email = email;

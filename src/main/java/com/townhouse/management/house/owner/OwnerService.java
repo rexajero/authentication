@@ -49,6 +49,7 @@ public class OwnerService {
         return ownerRepository.save(owner);
     }
 
+    //Get House from repository.
     public Owner addOwner(House house, boolean isOccupant, String firstName, String lastName, String middleName,
         String phoneNumber, Date birthday, String nationality, String email, String zipCode,
         String country, String province, String city, String addrLineOne, String addrLineTwo) {
@@ -57,11 +58,9 @@ public class OwnerService {
         
         Owner owner = new Owner(h, isOccupant, firstName, lastName, middleName, phoneNumber, 
             birthday, nationality, email, zipCode, country, province, city, addrLineOne, addrLineTwo);
-        owner = ownerRepository.save(owner);
-        return owner;
-    }
 
-    //replace owner
+        return ownerRepository.save(owner);
+    }
 
     public Owner findOwnerById(Long id) throws Exception {
         Owner owner = ownerRepository.findById(id).orElseThrow(() -> new Exception("Owner not found"));
@@ -69,6 +68,7 @@ public class OwnerService {
     }
 
     public OwnerDTO add(OwnerRegistrationRequest request) throws Exception {
+        
         House house = houseRepository.getById(request.getHouse().getId());
 
         Owner owner = new Owner(
