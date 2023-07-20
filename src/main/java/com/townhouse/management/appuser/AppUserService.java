@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,6 +37,8 @@ public class AppUserService implements UserDetailsService{
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSender emailSender;
+    private final AppUserDaoImpl appUserDaoImpl;
+    private final AppUserDTOMapper appUserDTOMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) 
@@ -60,8 +63,10 @@ public class AppUserService implements UserDetailsService{
         return "Password reset successful";
     }
 
-    public List<AppUser> findAllUsers() {
-        return appUserRepository.findAll();
+    public List<AppUserDTO> findAllUsers() {
+        // return appUserDaoImpl.getAll().stream().map(appUserDTOMapper).collect(Collectors.toList());
+        return appUserRepository.findAll().stream().map(appUserDTOMapper).collect(Collectors.toList());
+        // return appUserRepository.findAll();
     }
 
     public AppUser findUser(String email) {

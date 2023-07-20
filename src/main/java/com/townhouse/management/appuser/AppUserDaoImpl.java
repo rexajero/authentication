@@ -1,6 +1,7 @@
 package com.townhouse.management.appuser;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class AppUserDaoImpl implements AppUserDao<AppUser> {
     }
 
     @Override
-    public Collection<AppUser> getAll() {
+    public List<AppUser> getAll() {
         return appUserRepository.findAll();
     }
 
