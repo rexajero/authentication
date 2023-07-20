@@ -64,9 +64,7 @@ public class AppUserService implements UserDetailsService{
     }
 
     public List<AppUserDTO> findAllUsers() {
-        // return appUserDaoImpl.getAll().stream().map(appUserDTOMapper).collect(Collectors.toList());
-        return appUserRepository.findAll().stream().map(appUserDTOMapper).collect(Collectors.toList());
-        // return appUserRepository.findAll();
+        return appUserDaoImpl.getAll().stream().map(appUserDTOMapper).collect(Collectors.toList());
     }
 
     public AppUser findUser(String email) {

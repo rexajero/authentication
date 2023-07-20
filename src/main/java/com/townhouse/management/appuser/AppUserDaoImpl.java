@@ -6,10 +6,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class AppUserDaoImpl implements AppUserDao<AppUser> {
 
-    private AppUserRepository appUserRepository;
+    private final AppUserRepository appUserRepository;
 
     @Override
     public Optional<AppUser> get(Long id) {
