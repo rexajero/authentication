@@ -41,14 +41,16 @@ public class HouseService {
     private final VehicleRepository vehicleRepository;
     private final AppUserRepository appUserRepository;
     private final HouseDTOMapper houseDTOMapper;
+    private final HouseDaoImpl houseDaoImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public House registerNewHouse(HouseRegistrationRequest request) {
+    public HouseDTO registerNewHouse(HouseRegistrationRequest request) {
 
         House house = new House(request.getBlock(), request.getLot());
-        house = houseRepository.save(house);
+        house = houseDaoImpl.saveHouse(house);
+        // house = houseRepository.save(house);
 
         Owner owner = new Owner(
             house,
@@ -117,10 +119,12 @@ public class HouseService {
             vehicleRepository.save(vehicle);
         }
 
-        return house;
+        // return house;
+        return houseDTOMapper.apply(house);
     }
 
     public House registerOnlyHouse(int block, int lot) throws Exception {
+
         boolean exist = houseRepository.findByBlockAndLot(block, lot).isPresent();
 
         if(exist) {

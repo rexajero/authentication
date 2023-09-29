@@ -27,10 +27,14 @@ public class AppUserController {
         return new ResponseEntity<>(appUsers, HttpStatus.OK);
     }
 
-    @GetMapping("/find")
-    public ResponseEntity<AppUser> findUser(@RequestParam("email") String email) {
-        AppUser appUser = appUserService.findUser(email);
-        return new ResponseEntity<>(appUser, HttpStatus.OK);
+    @GetMapping("/find/Email")
+    public ResponseEntity<AppUserDTO> findUser(@RequestParam("email") String email) {
+        return new ResponseEntity<>(appUserService.findAppUserByEmail(email), HttpStatus.OK);
+    }
+
+    @GetMapping("/find/Id")
+    public ResponseEntity<AppUserDTO> findUser(@RequestParam("id") Long id) {
+        return new ResponseEntity<>(appUserService.findAppUserById(id), HttpStatus.OK);
     }
 
     @PostMapping(path = "resetpassword")

@@ -34,10 +34,6 @@ public class RegistrationService {
     private final AppUserRepository appUserRepository;
     private final EmailSender emailSender;
 
-    private final HouseRepository houseRepository;
-    private final HouseService houseService;
-    private final OwnerService ownerService;
-
     public String register(RegistrationRequest request) throws Exception {
 
         // Validate email and check if already taken
@@ -45,24 +41,22 @@ public class RegistrationService {
             throw new IllegalStateException("Invalid email.");
         }
 
-        String token = "null";
-
-        switch(request.getAppUserRole()){
-            case ADMIN:
-                token = registerAdmin(request);
-                break;
-            default:
-                break;
-        }
-        return token;
+        return registerAppUser(request);
     }
 
-    private String registerAdmin(RegistrationRequest request) {
+    private String registerAppUser(RegistrationRequest request) {
         String pass = bCryptPasswordEncoder.encode(request.getPassword());
-        AppUser appUser = new AppUser(request.getEmail(), pass, AppUserRole.ADMIN);
+        AppUser appUser = new AppUser(request.getEmail(), pass, request.getAppUserRole());
         appUserRepository.save(appUser);
         return createToken(appUser);
     }
+
+    // private String registerAdmin(RegistrationRequest request) {
+    //     String pass = bCryptPasswordEncoder.encode(request.getPassword());
+    //     AppUser appUser = new AppUser(request.getEmail(), pass, AppUserRole.ADMIN);
+    //     appUserRepository.save(appUser);
+    //     return createToken(appUser);
+    // }
 
     private String createToken(AppUser appUser) {
         String token = UUID.randomUUID().toString();

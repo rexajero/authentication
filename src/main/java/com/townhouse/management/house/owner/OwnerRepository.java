@@ -8,10 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.townhouse.management.appuser.AppUser;
 import com.townhouse.management.house.House;
+import java.util.List;
+
 
 
 @Repository
 @Transactional(readOnly = true)
 public interface OwnerRepository extends JpaRepository<Owner, Long>{
     Owner findByHouse(House house);
+    Owner findByAppUser(AppUser appUser);
 }

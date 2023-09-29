@@ -21,11 +21,13 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
+    //register app_user
     @PostMapping
     public ResponseEntity<String> register(@RequestBody RegistrationRequest request) throws Exception {
         return new ResponseEntity<String>(REGISTER_MESSAGE + registrationService.register(request), HttpStatus.OK);
     }
 
+    //confirm app_user registration
     @GetMapping(path = "confirm")
     public ResponseEntity<String> confirm(@RequestParam("token") String token) {
         return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.CREATED);

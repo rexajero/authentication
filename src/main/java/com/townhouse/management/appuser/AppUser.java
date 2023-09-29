@@ -1,9 +1,7 @@
 package com.townhouse.management.appuser;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -48,18 +46,6 @@ public class AppUser implements UserDetails{
     private Boolean enabled = false;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    
-    // public AppUser(String firstName, 
-    //                 String lastName, 
-    //                 String middleName,
-    //                 Date birthday,
-    //                 String phoneNumber,
-    //                 String email, 
-    //                 AppUserRole appUserRole) {
-    //     this.email = email;
-    //     this.password = generateInitialPassword(birthday);
-    //     this.appUserRole = appUserRole;
-    // }
 
     public AppUser(String email, String password, AppUserRole appUserRole) {
         this.email = email;
@@ -72,12 +58,6 @@ public class AppUser implements UserDetails{
         SimpleGrantedAuthority authority = 
         new SimpleGrantedAuthority(appUserRole.name());
         return Collections.singletonList(authority);
-    }
-
-    private String generateInitialPassword(Date birthday) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String pass = sdf.format(birthday);
-        return pass;
     }
 
     @Override

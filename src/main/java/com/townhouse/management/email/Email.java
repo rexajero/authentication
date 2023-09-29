@@ -1,6 +1,9 @@
 package com.townhouse.management.email;
 
 import com.townhouse.management.appuser.AppUser;
+import com.townhouse.management.appuser.AppUserRepository;
+import com.townhouse.management.house.owner.Owner;
+import com.townhouse.management.house.owner.OwnerRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -11,7 +14,16 @@ public class Email {
     public void sendEmail(AppUser appUser, String token) {
         
         String link = "http://localhost:8080/api/v1/mytownhouse/registration/confirm?token=" + token;
-        emailSender.send(appUser.getEmail(), buildEmail("appUser.getFirstName()", link));
+        Owner owner = new Owner();
+        switch(appUser.getAppUserRole()) {
+            case OWNER:
+                // owner = ownerRepository.findByAppUser(appUser);
+                break;
+            default:
+                System.out.println("Not supported.");
+                break;
+        }
+        emailSender.send(appUser.getEmail(), buildEmail(owner.getFirstName(), link));
     }
 
     public String buildEmail(String name, String link) {

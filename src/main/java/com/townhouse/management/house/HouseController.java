@@ -22,13 +22,15 @@ public class HouseController {
     }
 
     @PostMapping
-    public ResponseEntity<House> addHouse(@RequestBody HouseRegistrationRequest request) {
-        return new ResponseEntity<House>(houseService.registerNewHouse(request), HttpStatus.OK);
+    public ResponseEntity<HouseDTO> addHouse(@RequestBody HouseRegistrationRequest request) {
+        return new ResponseEntity<HouseDTO>(houseService.registerNewHouse(request), HttpStatus.OK);
     }
 
     //add only the house
     @PostMapping(path = "add")
     public ResponseEntity<House> confirm(@RequestParam("block") int block, @RequestParam("lot") int lot) throws Exception {
+        //register house
+        //register owner
         return new ResponseEntity<>(houseService.registerOnlyHouse(block, lot), HttpStatus.CREATED);
     }
 

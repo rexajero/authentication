@@ -29,6 +29,21 @@ public class AppUserDaoImpl implements AppUserDao<AppUser> {
         return appUserRepository.save(appUser);
     }
 
+    @Override
+    public Optional<AppUser> getByEmail(String email) {
+        return appUserRepository.findByEmail(email);
+    }
+
+    @Override
+    public int enableAppUser(String email) {
+        return appUserRepository.enableAppUser(email);
+    }
+
+    @Override
+    public int updateEmail(Long id, String email) {
+        return appUserRepository.updateEmail(id, email);
+    }
+
     // @Override
     // public void update(AppUser appUser) {
     //     appUserRepository.
