@@ -70,7 +70,6 @@ public class OwnerService {
     public OwnerDTO add(OwnerRegistrationRequest request) throws Exception {
         
         House house = houseRepository.getById(request.getHouse().getId());
-
         Owner owner = new Owner(
             house, 
             request.isOccupant(), 

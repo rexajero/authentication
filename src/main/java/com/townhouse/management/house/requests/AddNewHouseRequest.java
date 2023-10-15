@@ -1,5 +1,9 @@
 package com.townhouse.management.house.requests;
 
+import java.util.Set;
+
+import com.townhouse.management.appuser.AppUserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,6 +14,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class AddNewHouseRequest {
-    private final int block;
-    private final int lot;
+    private final AppUserRole requestOwnerRole;
+    private final Long requestOwnerRoleId;
+    private final Long houseId;
+    private final RequestType requestType;
+    private final Set<MoveInItem> moveInItems;
 }

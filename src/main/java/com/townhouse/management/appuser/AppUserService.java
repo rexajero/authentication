@@ -67,6 +67,16 @@ public class AppUserService implements UserDetailsService{
         return appUserRepository.save(new AppUser(owner.getEmail(), generateInitialPassword(owner.getBirthday()), owner.getAppUserRole()));
     }
 
+    public AppUserDTO register(AppUserRegistrationRequest request) {
+        String pass = bCryptPasswordEncoder.encode(request.getPassword());
+        AppUser appUser = appUserDaoImpl.save(new AppUser(request.getEmail(), pass, request.getAppUserRole()));
+
+        //create token
+        //send email
+        
+        return appUserDTOMapper.apply(appUser);
+    }
+
     public AppUserDTO updateAppUserEmail(Long id, String email) {
         //check if new email is already used
         //check if user is registered

@@ -47,7 +47,9 @@ public class RegistrationService {
     private String registerAppUser(RegistrationRequest request) {
         String pass = bCryptPasswordEncoder.encode(request.getPassword());
         AppUser appUser = new AppUser(request.getEmail(), pass, request.getAppUserRole());
-        appUserRepository.save(appUser);
+    
+        appUser = appUserRepository.save(appUser);
+
         return createToken(appUser);
     }
 

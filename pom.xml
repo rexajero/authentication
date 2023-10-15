@@ -71,6 +71,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>townhouse-management-docker</finalName>
 	</build>
 	<repositories>
 		<repository>
